@@ -1,0 +1,136 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+img {
+    border: none;
+    max-width: 100%;
+    margin: 0 auto
+}
+a {
+    text-decoration: none;
+}
+
+ul, li {
+    list-style: none;
+}
+
+.arc_nav {
+    width: 100%;
+    height: 4.7rem;
+}
+
+.arc_nav_dqwz {
+    margin-left: 1rem;
+    height: 2rem;
+    color: #858585;
+    float: left;
+}
+
+.arc_nav_dqwz {
+    margin-left: 1rem;
+    height: 2rem;
+    color: #858585;
+    float: left;
+}
+
+.arc_nav_dqwz a {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #fb7551;
+    line-height: 1.75rem;
+}.search {
+     width: 100%;
+     height: 2rem;
+     background-color: #fff;
+     float: left;
+ }
+.bar6 {background: #f4f4f4;}
+.bar6 input {
+    border: 0.1rem solid #fb7551;
+    border-radius: 0.4rem;
+    background: transparent;
+    top: 0;
+    right: 0;
+}
+.bar6 button {
+    background: #fb7551;
+    border-radius: 0 0.4rem 0.4rem 0;
+    width: 3rem;
+    top: 0;
+    right: 0;
+    color: #fb7551;
+}
+.bar6 button:before {
+    content: "搜索";
+    font-size: 0.7rem;
+    color: #F9F0DA;
+}
+.list_news {
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: #fff;
+    margin-bottom: 0rem;
+    border: 1px solid #fff;
+    position: relative;
+
+}
+
+.list_news_up {
+    padding: 0.1rem 0;
+
+}
+
+.list_news_up p {
+    line-height: 1.5rem;
+    font-size: 0.8rem;
+    padding: 0.2rem 0 0.2rem 0.8rem;
+}
+
+
+.list_news_down {
+
+
+}
+
+.list_news_down p {
+    line-height: 0.7rem;
+    font-size: 0.6rem;
+    color: #252525;
+    padding: 0 0.8rem 1.2rem;
+}
+
+
+#list_news_down_gz {
+    color: #fb7551;
+    position: absolute;
+    right: 1rem;
+    bottom: 0.3rem;
+    font-size: 0.7rem;
+}
+
+form {
+    position: relative;
+    width: 15rem;
+    margin: 0 auto;
+}
+
+input, button {
+    border: none;
+    outline: none;
+    border-color: #fb7551;
+}
+
+input {
+    width: 100%;
+    height: 2rem;
+    padding-left: 0.65rem;
+}
+
+button {
+    height: 2rem;
+    width:  2rem;
+    cursor: pointer;
+    position: absolute;
+}

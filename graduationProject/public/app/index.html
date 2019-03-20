@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hello MUI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="css/mui.min.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/store.css">
+    <link rel="stylesheet" href="css/swiper-3.4.2.min.css">
+    <style>
+        .mui-active {
+            color: rgb(250, 225, 105) !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="store-bottom">
+    <div class="menu menu-index" id="defaultTab" href="./module/shop/index.html">首页</div>
+    <div class="menu menu-category" href="./module/shop/category.html">分类</div>
+    <div class="menu menu-cart" href="./module/shop/cart.html">购物车</div>
+    <div class="menu menu-center" href="./module/shop/user.html">我的</div>
+</div>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.0.3.min.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/app.js"></script>
+<script src="js/template7.js"></script>
+<script src="js/swiper-3.4.2.min.js"></script>
+<script>
+    //mui初始化
+    mui.init();
+    var subpages = [
+        './module/shop/index.html',
+        './module/shop/category.html',
+        './module/shop/cart.html',
+        './module/shop/user.html',
+    ];
+    var activeTab = subpages[0];
+    var subpage_style = {
+        top: '0px',
+        bottom: '51px'
+    };
+    var aniShow = {};
+    var plusReady = false;
+    var cartPanel = null;
+    //创建子页面，首个选项卡页面显示，其它均隐藏；
+    var app = new App(function () {
+        plusReady = true;
+        subpage_style.bottom = Math.ceil(2.4 * app.remValue) + 'px'
+        //plus.screen.lockOrientation('landscape-primary');//设置横屏
+        //plus.navigator.setStatusBarStyle('light');
+        plus.navigator.setStatusBarStyle('dark');
+        plus.navigator.closeSplashscreen();
+        plus.navigator.setFullscreen(false);
+        var self = app.getCurrentWebview();
+        for (var i = 0; i < subpages.length; i++) {
+            var temp = {};
+            var sub = plus.webview.create(subpages[i], subpages[i], subpage_style, {});
+            if (i > 0) {
+                sub.hide();
+            } else {
+                temp[subpages[i]] = "true";
+                mui.extend(aniShow, temp);
+                $($('.store-bottom .menu')[0]).addClass('act')
+            }
+            self.append(sub);
+        }
+        //选项卡点击事件
+        mui('.store-bottom').on('tap', '.menu', function (e) {
+            $(this).addClass('act').siblings().removeClass('act')
+            var targetTab = this.getAttribute('href');
+            if (targetTab == activeTab) {
+                return;
+            }
+            switch (targetTab) {
+                case './module/shop/index.html':
+                    app.fireWebview('./module/shop/index.html', 'pageReload')
+                    break;
+                case './module/shop/category.html':
+                    app.fireWebview('./module/shop/category.html', 'pageReload')
+                    break;
+                case './module/shop/cart.html':
+                    app.fireWebview('./module/shop/cart.html', 'pageReload')
+                    break;
+                case './module/shop/user.html':
+                    app.fireWebview('./module/shop/user.html', 'pageReload')
+                    break;
+            }
+            //若为iOS平台或非首次显示，则直接显示
+            if (mui.os.ios || aniShow[targetTab]) {
+                plus.webview.show(targetTab);
+            } else {
+                //否则，使用fade-in动画，且保存变量
+                var temp = {};
+                temp[targetTab] = "true";
+                mui.extend(aniShow, temp);
+                plus.webview.show(targetTab, "fade-in", 300);
+            }
+            plus.webview.hide(activeTab);
+            activeTab = targetTab;
+        });
+
+        if (plus.os.name == 'Android') {
+            Api.versionCheck()
+        }
+
+        var current = plus.webview.currentWebview();
+        cartPanel = plus.webview.create('./module/shop/_cart.html', './module/shop/_cart.html',
+                {
+                    bottom: '0%',
+                    height: '100%',
+                    width: '100%',
+                    left: '0%',
+                    position: 'absolute',
+                    scrollIndicator: 'none',
+                    background: 'transparent'
+                }
+                , {type: current.type});
+        cartPanel.hide();
+        current.append(cartPanel);
+
+        //plus.push.addEventListener("receive", function (msg) {
+        // 分析msg.payload处理业务逻辑
+        //alert("推送: " + msg.content);
+        //alert("推送: " + JSON.stringify(msg));
+        //mui.fire(plus.webview.getWebviewById('list1.html'), 'tipReload', {})
+        //mui.fire(self, 'paipaiTipReload', {count: 1})
+        //}, false);
+    })
+    document.addEventListener("showCart", function (event) {
+        mui.fire(cartPanel, 'pageReload', {
+                    product: event.detail.product,
+                    fromWebId: event.detail.fromWebId,
+                }
+        );
+        cartPanel.show();
+    }, false);
+    document.addEventListener("goLogin", function () {
+        app.openListWindow('login.html', 'login.html', {});
+    }, false);
+    document.addEventListener('Unauthorized', function () {
+        app.openDetailWindow('login.html', 'login.html', {});
+    });
+    document.addEventListener("goRegister", function () {
+        app.openListWindow('register.html', 'register.html', {});
+    }, false);
+    document.addEventListener('gohome', function () {
+        var defaultTab = document.getElementById("defaultTab");
+        //模拟首页点击
+        mui.trigger(defaultTab, 'tap');
+        //切换选项卡高亮
+//      var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
+//      if (defaultTab !== current) {
+//          current.classList.remove('mui-active');
+//          defaultTab.classList.add('mui-active');
+//      }
+    });
+</script>
+</body>
+</html>
