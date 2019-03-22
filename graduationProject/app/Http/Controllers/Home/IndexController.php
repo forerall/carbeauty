@@ -14,15 +14,6 @@ class IndexController extends Controller
     public function index()
     {
 
-//        $ex = M('Example');
-//        $example = $ex->order('date desc')->limit(2)->select();
-//        $this->assign('example', $example);
-//        $pro = M('Project');
-//        $project = $pro->order('price asc')->limit(2)->select();
-//        $this->assign('project', $project);
-//        $this->display();
-//        Example::
-
         $example = Example::with(['user','project']);
         $example = $example->orderBy('id', 'desc')
             ->take(3)->get();
@@ -32,7 +23,7 @@ class IndexController extends Controller
             ->take(2)->get();
 
 
-        return view('Home.index')
+        return view('home.index')
             ->with('example', $example)
             ->with('project', $project);
     }
@@ -56,7 +47,7 @@ class IndexController extends Controller
     }
     public function customer()
     {
-        return view('Home.customer');
+        return view('home.customer');
     }
     public function about()
     {

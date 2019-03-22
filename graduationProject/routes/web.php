@@ -32,7 +32,7 @@ Auth::routes();
 //web前端路由
 Route::group([
     'prefix' => '',
-    'namespace'=>'Home'
+    'namespace'=>'home'
 ], function () {
     Route::get('/index', 'IndexController@index');
     Route::get('/project', 'IndexController@project');
